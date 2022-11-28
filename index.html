@@ -12,6 +12,7 @@
 <body style="margin: 0px; overflow: hidden;">
     <button onclick="chair()">Tree</button>
     <button onclick="tree()">Chair</button>
+    <input type="range" name="slider" id="slider" min="1" max="360" value="1" onchange="rotate()">
     <!-- <button onclick="ChangeColor()"></button> -->
     <a-scene embedded arjs>
 
@@ -23,7 +24,7 @@
         <a-marker preset="hiro">
             <!-- <a-box position="0 0 0" material="color:red;" animation="property: rotation; to: 360 360 0; dur: 2000; repeat:indefinite; easing: linear; loop: true">
             </a-box> -->
-            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" gltf-model="#mike"></a-entity>
+            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" gltf-model="#mike" drag-rotate-component></a-entity>
         </a-marker>
         <a-entity camera>
 
@@ -45,8 +46,55 @@
         tree.setAttribute('scale','1 1 1');
     }
 
-    // function color() {
-    //     var col = document.querySelector('a-entity');
-    // }
+    function rotate() {
+        var col = document.querySelector('a-entity');
+        col.object3D.rotation.set(
+            THREE.Math.degToRad(15),
+            THREE.Math.degToRad(30),
+            THREE.Math.degToRad(90)
+        );
+        col.object3D.rotation.x += Math.PI/2;
+
+        // With .setAttribute (less recommended).
+        col.setAttribute('rotation', {x: 15});
+    }
+
+    AFRAME.registerComponent('drag-rotate-component',{
+      schema : { speed : {default:1}},
+      init : function(){
+        this.ifMouseDown = false;
+        this.x_cord = 0;
+        this.y_cord = 0;
+        document.addEventListener('mousedown',this.OnDocumentMouseDown.bind(this));
+        document.addEventListener('mouseup',this.OnDocumentMouseUp.bind(this));
+        document.addEventListener('mousemove',this.OnDocumentMouseMove.bind(this));
+      },
+      OnDocumentMouseDown : function(event){
+        this.ifMouseDown = true;
+        this.x_cord = event.clientX;
+        this.y_cord = event.clientY;
+      },
+      OnDocumentMouseUp : function(){
+        this.ifMouseDown = false;
+      },
+      OnDocumentMouseMove : function(event)
+      {
+        if(this.ifMouseDown)
+        {
+          var temp_x = event.clientX-this.x_cord;
+          var temp_y = event.clientY-this.y_cord;
+          if(Math.abs(temp_y)<Math.abs(temp_x))
+          {
+            this.el.object3D.rotateY(temp_x*this.data.speed/1000);
+          }
+          else
+          {
+            this.el.object3D.rotateX(temp_y*this.data.speed/1000);
+          }
+          this.x_cord = event.clientX;
+          this.y_cord = event.clientY;
+        }
+      }
+    });
 </script>
 </html>
