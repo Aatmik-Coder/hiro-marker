@@ -10,41 +10,83 @@
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
 </head>
 <body style="margin: 0px; overflow: hidden;">
-    <button onclick="chair()">Tree</button>
-    <button onclick="tree()">Chair</button>
-    <input type="range" name="slider" id="slider" min="1" max="360" value="1" onchange="rotate()">
+    <button onclick="fun(this)" class="tree">Tree</button>
+    <button onclick="fun(this)" class="couldron">Couldron</button>
+    <button onclick="fun(this)" class="chair">Chair</button>
+    <button onclick="fun(this)" class="arm_chair__furniture">Arm Chair</button>
+    <button onclick="fun(this)" class="couch">Couch</button>
+    <button onclick="fun(this)" class="monk">Monk</button>
+    <button onclick="fun(this)" class="my-texture">Change texture</button>
+    <!-- <input type="range" name="slider" id="slider" min="1" max="360" value="1" onchange="rotate()"> -->
     <!-- <button onclick="ChangeColor()"></button> -->
     <a-scene embedded arjs>
 
         <a-assets>
-            <a-asset-item id="adam" response-type="arraybuffer" src="assets/tree.gltf"></a-asset-item>
-            <a-asset-item id="mike" response-type="arraybuffer" src='assets/coffee_table.gltf'></a-asset-item>
+            <!-- <img id="textu" src="assets/monk/textures/texture_2.png"> -->
+            <a-asset-item id="tree" response-type="arraybuffer" src="assets/tree.gltf"></a-asset-item>
+            <a-asset-item id="couldron" response-type="arraybuffer" src="assets/couldron/scene.gltf"></a-asset-item>
+            <a-asset-item id="chair" response-type="arraybuffer" src='assets/coffee_table.gltf'></a-asset-item>
+            <a-asset-item id="arm_chair__furniture" response-type="arraybuffer" src='assets/arm_chair__furniture.glb'></a-asset-item>
+            <a-asset-item id="couch" response-type="arraybuffer" src='assets/Couch.gltf'></a-asset-item>
+            <a-asset-item id="monk" response-type="arraybuffer" src='assets/monk/scene.gltf'></a-asset-item>
+            <a-asset-item id="my-texture" response-type="arraybuffer" src='assets/couldron/scene.gltf'></a-asset-item>
       </a-assets>
 
         <a-marker preset="hiro">
             <!-- <a-box position="0 0 0" material="color:red;" animation="property: rotation; to: 360 360 0; dur: 2000; repeat:indefinite; easing: linear; loop: true">
             </a-box> -->
-            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" gltf-model="#mike"></a-entity>
+            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" windows-motion-controls="hand: left"
+            >
+            <!-- animation="property:rotation; easing:linear; dur:6000; to:0 360 0; loop:true;" -->
+              
+            </a-entity>
         </a-marker>
         <a-entity camera>
-
         </a-entity>
     </a-scene>
 </body>
 <script>
-    function chair() {
-        var chair = document.querySelector('a-entity');
-        chair.removeAttribute('gltf-model');
-        chair.setAttribute('gltf-model','#adam');
-        chair.setAttribute('scale','0.1 0.1 0.1');
+    function fun(name) {
+      var anyThing = document.querySelector('a-entity');
+      anyThing.removeAttribute('gltf-model');
+      anyThing.setAttribute('gltf-model', '#'+name.className);
+      if (name.className == 'tree') {
+        anyThing.setAttribute('scale', '0.1 0.1 0.1');
+      }
+      if(name.className == 'chair') {
+        anyThing.setAttribute('scale','1 1 1');
+      }
+      if(name.className == 'arm_chair__furniture') {
+        anyThing.setAttribute('scale','1 1 1');
+      }
+      if (name.className == 'couch') {
+        anyThing.setAttribute('scale','0.1 0.1 0.1');
+      }
+      if(name.className == 'my-texture') {
+        var tex = new THREE.TextureLoader().load('assets/couldron/textures/texture_2.png');
+        tex.flipY = false; 
+        // for glTF models.
+
+        anyThing.addEventListener('model-loaded', function (e) {
+            e.detail.model.traverse(function(node) {
+              if (node.isMesh) node.material.map = tex;
+            });
+          })
+      }
     }
 
-    function tree() {
-        var tree = document.querySelector('a-entity');
-        tree.removeAttribute('gltf-model');
-        tree.setAttribute('gltf-model','#mike');
-        tree.setAttribute('scale','1 1 1');
-    }
+    // function changeTexture(name) {
+      // if(name.className == 'monk') {
+        // var tex = new THREE.TextureLoader().load('#'+name.className);
+        // tex.flipY = false; // for glTF models.
+
+        // anyThing.addEventListener('model-loaded', function (e) {
+        //     e.detail.model.traverse(function(node) {
+        //       if (node.isMesh) node.material.map = tex;
+        //     });
+        //   })
+      // }
+    // }
 
     function rotate() {
     //     var col = document.querySelector('a-entity');
