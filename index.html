@@ -9,6 +9,8 @@
     <!-- <script src="https://cdn.jsdelivr.net/gh/jeromeetienne/AR.js@1.6.2/aframe/build/aframe-ar.js"></script> -->
     <script src="https://unpkg.com/aframe-orbit-controls@1.2.0/dist/aframe-orbit-controls.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+    <script src="https://rawgit.com/allanweir/aframe-touch-rotation-controls/master/dist/aframe-touch-rotation-controls.min.js"></script>
 </head>
 <body style="margin: 0px; overflow: hidden;">
     <button onclick="fun(this)" class="tree">Tree</button>
@@ -17,6 +19,7 @@
     <button onclick="fun(this)" class="arm_chair__furniture">Arm Chair</button>
     <button onclick="fun(this)" class="couch">Couch</button>
     <button onclick="fun(this)" class="monk">Monk</button>
+    <button onclick="fun(this)" class="drone">Drone</button>
     <button onclick="fun(this)" class="my-texture">Change texture</button>
     <!-- <input type="range" name="slider" id="slider" min="1" max="360" value="1" onchange="rotate()"> -->
     <!-- <button onclick="ChangeColor()"></button> -->
@@ -30,19 +33,22 @@
             <a-asset-item id="arm_chair__furniture" response-type="arraybuffer" src='assets/arm_chair__furniture.glb'></a-asset-item>
             <a-asset-item id="couch" response-type="arraybuffer" src='assets/Couch.gltf'></a-asset-item>
             <a-asset-item id="monk" response-type="arraybuffer" src='assets/monk/scene.gltf'></a-asset-item>
+            <a-asset-item id="drone" response-type="arraybuffer" src="assets/buster_drone/scene.gltf"></a-asset-item>
             <a-asset-item id="my-texture" response-type="arraybuffer" src='assets/couldron/scene.gltf'></a-asset-item>
       </a-assets>
 
         <a-marker preset="hiro">
             <!-- <a-box position="0 0 0" material="color:red;" animation="property: rotation; to: 360 360 0; dur: 2000; repeat:indefinite; easing: linear; loop: true">
             </a-box> -->
-            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" windows-motion-controls="hand: left"
+            <a-entity position="0 0 0" rotation="0 0 0" scale="1 1 1" animation-mixer
             >
             <!-- animation="property:rotation; easing:linear; dur:6000; to:0 360 0; loop:true;" -->
               
             </a-entity>
         </a-marker>
-        <a-entity camera look-controls orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 180; initialPosition: 0 5 15">
+        <a-entity camera universal-controls="movementControls:hmd; rotationControls:touch-rotation"
+        >
+        <!-- look-controls orbit-controls="target: 0 1.6 -0.5; minDistance: 0.5; maxDistance: 180; initialPosition: 0 5 15" -->
         </a-entity>
     </a-scene>
 </body>
